@@ -10,16 +10,18 @@ const int LOOP_DELAY_MILLIS = 5; // Wait for 0.005s between motor updates.
 // Implement your own PD controller here.
 float pd_control(float pos,
                  float vel,
-                 float target,
+                 float target_position,
                  float Kp,
                  float Kd)
 {
-  return 0.0; // YOUR CODE HERE
+  float error = target_position - pos;
+  float d_error = LOOP_DELAY_MILLIS * vel;
+  return Kp * error - Kd * d_error;
 }
 
 /* Sanitize current command to make it safer.
 
-Clips current command between bounds. Reduces command if actuator outside of position or velocity bounds.
+Clips current command between bounds. Reduces command if actuator outside of position or D bounds.
 Max current defaults to 1000mA. Max position defaults to +-180degs. Max velocity defaults to +-5rotations/s.
 */
 void sanitize_current_command(float &command,
